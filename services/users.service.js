@@ -15,12 +15,12 @@ class UsersService {
 
   findOne(id) {
     const user = this.users.find(item => item.id === id);
-    if(!user) return [404, null];
-    return [200, user];
+    if(!user) throw new Error('Usuario no encontrado');
+    return user;
   }
 
   update(id, changes) {
-    const index = this.users.find(item => item.id === id);
+    const index = this.users.findIndex(item => item.id === id);
     if(index === -1) {
       throw new Error('Usuario no encontrado');
     }
@@ -33,7 +33,7 @@ class UsersService {
   }
 
   delete(id) {
-    const index = this.users.find(item => item.id === id);
+    const index = this.users.findIndex(item => item.id === id);
     if(index === -1) {
       throw new Error('Usuario no encontrado');
     }

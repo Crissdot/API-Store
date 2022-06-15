@@ -11,10 +11,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const [statusCode, product] = service.findOne(id);
-
-  res.status(statusCode).json(product);
+  try {
+    const { id } = req.params;
+    const product = service.findOne(id);
+    res.json(product);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
 });
 
 router.post('/', (req, res) => {
@@ -24,16 +29,28 @@ router.post('/', (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-  const product = service.update(id, body);
-  res.json(product);
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const product = service.update(id, body);
+    res.json(product);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
 });
 
 router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const deletedProduct = service.delete(id);
-  res.json(deletedProduct);
+  try {
+    const { id } = req.params;
+    const deletedProduct = service.delete(id);
+    res.json(deletedProduct);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
 });
 
 module.exports = router;

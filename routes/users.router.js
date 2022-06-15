@@ -11,10 +11,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const [statusCode, user] = service.findOne(id);
-
-  res.status(statusCode).json(user);
+  try {
+    const { id } = req.params;
+    const user = service.findOne(id);
+    res.json(user);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
 });
 
 router.post('/', (req, res) => {
@@ -24,16 +29,28 @@ router.post('/', (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-  const user = service.update(id, body);
-  res.json(user);
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const user = service.update(id, body);
+    res.json(user);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
 });
 
 router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const deletedUser = service.delete(id);
-  res.json(deletedUser);
+  try {
+    const { id } = req.params;
+    const deletedUser = service.delete(id);
+    res.json(deletedUser);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
 });
 
 module.exports = router;

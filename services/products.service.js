@@ -36,12 +36,12 @@ class ProductsService {
 
   findOne(id) {
     const product = this.products.find(item => item.id === id);
-    if(!product) return [404, null];
-    return [200, product];
+    if(!product) throw new Error('Producto no encontrado');
+    return product;
   }
 
   update(id, changes) {
-    const index = this.products.find(item => item.id === id);
+    const index = this.products.findIndex(item => item.id === id);
     if(index === -1) {
       throw new Error('Producto no encontrado');
     }
@@ -54,7 +54,7 @@ class ProductsService {
   }
 
   delete(id) {
-    const index = this.products.find(item => item.id === id);
+    const index = this.products.findIndex(item => item.id === id);
     if(index === -1) {
       throw new Error('Producto no encontrado');
     }

@@ -15,12 +15,12 @@ class CategoriesService {
 
   findOne(id) {
     const category = this.categories.find(item => item.id === id);
-    if(!category) return [404, null];
-    return [200, category];
+    if(!category) throw new Error('Categoria no encontrada');
+    return category;
   }
 
   update(id, changes) {
-    const index = this.categories.find(item => item.id === id);
+    const index = this.categories.findIndex(item => item.id === id);
     if(index === -1) {
       throw new Error('Categoria no encontrada');
     }
@@ -33,7 +33,7 @@ class CategoriesService {
   }
 
   delete(id) {
-    const index = this.categories.find(item => item.id === id);
+    const index = this.categories.findIndex(item => item.id === id);
     if(index === -1) {
       throw new Error('Categoria no encontrada');
     }
