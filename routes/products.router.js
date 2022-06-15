@@ -5,8 +5,14 @@ const ProductsService = require('../services/products.service.js');
 const router = express.Router();
 const service = new ProductsService();
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   const products = service.find();
+  // THROW ERROR
+  try {
+    products.something();
+  } catch (error) {
+    next(error);
+  }
   res.json(products);
 });
 
