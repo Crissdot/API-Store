@@ -9,7 +9,7 @@ const service = new UsersService();
 
 router.get('/', (req, res) => {
   const users = service.find();
-  res.json(users);
+  return res.json(users);
 });
 
 router.get('/:id',
@@ -18,7 +18,7 @@ router.get('/:id',
     try {
       const { id } = req.params;
       const user = service.findOne(id);
-      res.json(user);
+      return res.json(user);
     } catch (error) {
       next(error);
     }
@@ -28,7 +28,7 @@ router.get('/:id',
 router.post('/', (req, res) => {
   const body = req.body;
   const newUser = service.create(body);
-  res.status(201).json(newUser);
+  return res.status(201).json(newUser);
 });
 
 router.patch('/:id',
@@ -38,7 +38,7 @@ router.patch('/:id',
       const { id } = req.params;
       const body = req.body;
       const user = service.update(id, body);
-      res.json(user);
+      return res.json(user);
     } catch (error) {
       next(error)
     }
@@ -51,7 +51,7 @@ router.delete('/:id',
     try {
       const { id } = req.params;
       const deletedUser = service.delete(id);
-      res.json(deletedUser);
+      return res.json(deletedUser);
     } catch (error) {
       next(error);
     }
