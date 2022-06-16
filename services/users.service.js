@@ -1,3 +1,5 @@
+const boom = require('@hapi/boom');
+
 class UsersService {
 
   constructor() {
@@ -15,15 +17,13 @@ class UsersService {
 
   findOne(id) {
     const user = this.users.find(item => item.id === id);
-    if(!user) throw new Error('Usuario no encontrado');
+    if(!user) throw boom.notFound('Usuario no encontrado');
     return user;
   }
 
   update(id, changes) {
     const index = this.users.findIndex(item => item.id === id);
-    if(index === -1) {
-      throw new Error('Usuario no encontrado');
-    }
+    if(index === -1) throw boom.notFound('Usuario no encontrado');
     const user = this.users[index];
     this.users[index] = {
       ...user,
@@ -34,9 +34,7 @@ class UsersService {
 
   delete(id) {
     const index = this.users.findIndex(item => item.id === id);
-    if(index === -1) {
-      throw new Error('Usuario no encontrado');
-    }
+    if(index === -1) throw boom.notFound('Usuario no encontrado');
     const user = this.users[index];
     this.users.splice(index, 1);
     return user;
