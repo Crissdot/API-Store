@@ -1,9 +1,13 @@
 const boom = require('@hapi/boom');
 
+const pool = require('../libs/postgres');
+
 class UsersService {
 
   constructor() {
     this.users = [];
+    this.pool = pool;
+    this.pool.on('ERROR', console.log);
   }
 
   create(newUser) {
@@ -11,8 +15,10 @@ class UsersService {
     return newUser;
   }
 
-  find() {
-    return this.users;
+  async find() {
+    const queryString = 'SELECT * FROM users';
+    const query = await this.pool.query(queryString);
+    return query.rows;
   }
 
   findOne(id) {
