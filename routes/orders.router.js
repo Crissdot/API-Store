@@ -38,4 +38,18 @@ router.post(
   }
 );
 
+router.post(
+  '/add-item',
+  validatorHandler(addItemSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newItem = await service.addItem(body);
+      res.status(201).json(newItem);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 module.exports = router;
