@@ -16,6 +16,12 @@ const getProductSchema = Joi.object({
 const queryProductSchema = Joi.object({
   limit,
   offset,
+  price,
+  price_min,
+  price_max: price_max.when('price_min', {
+    is: price_min.required(),
+    then: Joi.required()
+  })
 });
 
 const createProductSchema = Joi.object({
