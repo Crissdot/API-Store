@@ -4,12 +4,8 @@ const { models } = require('../libs/sequelize');
 
 class UsersService {
 
-  constructor() {
-    this.users = [];
-  }
-
-  create(newUser) {
-    this.users.push(newUser);
+  async create(data) {
+    const newUser = await models.User.create(data);
     return newUser;
   }
 
@@ -18,29 +14,22 @@ class UsersService {
     return data;
   }
 
-  findOne(id) {
-    const user = this.users.find(item => item.id === id);
+  async findOne(id) {
+    const user = await models.User.findByPk(id);
     if(!user) throw boom.notFound('Usuario no encontrado');
     return user;
   }
 
-  update(id, changes) {
-    const index = this.users.findIndex(item => item.id === id);
-    if(index === -1) throw boom.notFound('Usuario no encontrado');
-    const user = this.users[index];
-    this.users[index] = {
-      ...user,
-      ...changes,
-    }
-    return this.users[index];
+  async update(id, changes) {
+    const user = await this.findOne(id);
+    const updatedUser = user.update(changes);
+    return updatedUser;
   }
 
-  delete(id) {
-    const index = this.users.findIndex(item => item.id === id);
-    if(index === -1) throw boom.notFound('Usuario no encontrado');
-    const user = this.users[index];
-    this.users.splice(index, 1);
-    return user;
+  async delete(id) {
+    const user = await this.findOne(id);
+    await user.destroy();
+    return {id};
   }
 
 }
