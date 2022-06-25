@@ -12,7 +12,7 @@ app.use(express.json());
 const whitelist = ['http://localhost:3001', 'https://crissdot.github.io'];
 const options = {
   origin: (origin, callback) => {
-    if(whitelist.includes(origin)) {
+    if(whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('You shall not pass'));
