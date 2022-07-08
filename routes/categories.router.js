@@ -35,7 +35,7 @@ router.post('/',
   validatorHandler(createCategorySchema, 'body'),
   async (req, res) => {
     const body = req.body;
-    const newUser = service.create(body);
+    const newUser = await service.create(body);
     return res.status(201).json(newUser);
   }
 );

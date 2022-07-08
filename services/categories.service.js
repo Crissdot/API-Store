@@ -23,14 +23,15 @@ class CategoryService {
   }
 
   async update(id, changes) {
-    return {
-      id,
-      changes,
-    };
+    const category = await this.findOne(id);
+    const updatedCategory = category.update(changes);
+    return updatedCategory;
   }
 
   async delete(id) {
-    return { id };
+    const category = await this.findOne(id);
+    await category.destroy();
+    return {id};
   }
 
 }
