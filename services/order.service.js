@@ -4,23 +4,6 @@ const { models } = require('./../libs/sequelize');
 
 class OrderService {
 
-  constructor(){
-  }
-
-  async create(data) {
-    const newOrder = await models.Order.create(data);
-    return newOrder;
-  }
-
-  async addItem(data) {
-    const newItem = await models.OrderProduct.create(data);
-    return newItem;
-  }
-
-  async find() {
-    return [];
-  }
-
   async findOne(id) {
     const order = await models.Order.findByPk(id, {
       include: [
@@ -35,15 +18,14 @@ class OrderService {
     return order;
   }
 
-  async update(id, changes) {
-    return {
-      id,
-      changes,
-    };
+  async create(data) {
+    const newOrder = await models.Order.create(data);
+    return newOrder;
   }
 
-  async delete(id) {
-    return { id };
+  async addItem(data) {
+    const newItem = await models.OrderProduct.create(data);
+    return newItem;
   }
 
 }
