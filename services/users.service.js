@@ -1,3 +1,5 @@
+const { ValidationError } = require('sequelize');
+
 const boom = require('@hapi/boom');
 
 const { models } = require('../libs/sequelize');
@@ -5,8 +7,12 @@ const { models } = require('../libs/sequelize');
 class UsersService {
 
   async create(data) {
-    const newUser = await models.User.create(data);
-    return newUser;
+    try {
+      const newUser = await models.User.create(data);
+      return newUser;
+    } catch {
+      throw boom.conflict('Email ocupado');
+    }
   }
 
   async find() {
