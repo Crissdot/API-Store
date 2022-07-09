@@ -1,11 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const { config } = require('./config/config');
 const routerApi = require('./routes/index.router');
 
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = config.port;
 
 app.use(express.json());
 
@@ -22,7 +23,7 @@ const options = {
 app.use(cors(options));
 
 app.get('/', (req, res) => {
-  res.send('Hola Mundo');
+  res.send('Production: ' + config.isProd);
 });
 
 routerApi(app);
