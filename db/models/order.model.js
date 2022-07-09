@@ -3,7 +3,7 @@ const { CUSTOMER_TABLE } = require('./customer.model');
 
 const ORDER_TABLE = 'orders';
 
-const OrderSchema = {
+const OrderSchemaMigration = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -27,6 +27,10 @@ const OrderSchema = {
     field: 'created_at',
     defaultValue: Sequelize.NOW,
   },
+}
+
+const OrderSchema = {
+  ...OrderSchemaMigration,
   total: {
     type: DataTypes.VIRTUAL,
     get() {
@@ -65,4 +69,4 @@ class Order extends Model {
   }
 }
 
-module.exports = { Order, OrderSchema, ORDER_TABLE };
+module.exports = { Order, OrderSchemaMigration, OrderSchema, ORDER_TABLE };
