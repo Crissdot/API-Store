@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { config } = require('./config/config');
 const routerApi = require('./routes/index.router');
+const { checkApiKey } = require('./middlewares/auth.handler');
 
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 
@@ -22,9 +23,12 @@ const options = {
 }
 app.use(cors(options));
 
-app.get('/', (req, res) => {
-  res.send('Production: ' + config.isProd);
-});
+app.get('/',
+  checkApiKey,
+  (req, res) => {
+    res.send('Production: ' + config.isProd);
+  }
+);
 
 routerApi(app);
 
