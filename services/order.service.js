@@ -18,6 +18,22 @@ class OrderService {
     return order;
   }
 
+  async findByUser(userId) {
+    const orders = await models.Order.findAll({
+      where: {
+        '$customer.user.id$': userId,
+      },
+      include: [
+        {
+          association: 'customer',
+          include: ['user']
+        },
+      ]
+    });
+
+    return orders;
+  }
+
   async create(data) {
     const newOrder = await models.Order.create(data);
     return newOrder;
