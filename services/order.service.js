@@ -34,7 +34,15 @@ class OrderService {
     return orders;
   }
 
-  async create(data) {
+  async create(userId) {
+    const user = await models.User.findByPk(userId, {
+      include: ['customer'],
+    });
+
+    const data = {
+      customerId: user.customer.id,
+    };
+
     const newOrder = await models.Order.create(data);
     return newOrder;
   }
