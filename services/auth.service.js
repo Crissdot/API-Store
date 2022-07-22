@@ -32,10 +32,33 @@ class AuthService {
     return { user, token }
   }
 
-  async sendMail(email) {
+  async sendRecovery(email) {
     const user = await service.findByEmail(email);
     if(!user) throw boom.unauthorized();
 
+    const payload = {
+      sub: user.id,
+    }
+    const token = jwt.sign(payload, config.jwtSecret, {expiresIn: '15min'});
+    const updatedUser = await service.update(user.id, { recoveryToken: token });
+
+    // TODO add view in frontend
+    // Example
+    // const link = `http://frontend.com/recovery?token=${updatedUser.recoveryToken}`;
+    const link = updatedUser.recoveryToken;
+
+    const mail = {
+      from: config.senderUserMail,
+      to: user.email,
+      subject: 'Email para recuperar contraseña',
+      html: `<b>Ingresa a este link => ${link} </b>`,
+    }
+
+    const success = await this.sendMail(mail);
+    return success;
+  }
+
+  async sendMail(infoMail) {
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       secure: true,
@@ -46,12 +69,7 @@ class AuthService {
       },
     });
 
-    await transporter.sendMail({
-      from: config.senderUserMail,
-      to: config.receiverUserMailTest,
-      subject: 'Este es un correo de prueba usando node',
-      text: 'Probando 1 2 3',
-    });
+    await transporter.sendMail(infoMail);
 
     return { message: 'Mail sended' };
   }
